@@ -54,6 +54,17 @@ public class CallDetectionManagerModule
     }
 
     @ReactMethod
+    public void getCallState() {
+        if (activity == null) {
+            activity = getCurrentActivity();
+            activity.getApplication().registerActivityLifecycleCallbacks(this);
+        }
+
+        int callState = telephonyManager.getCallState();
+        this.phoneCallStateUpdated(callState, "");
+    }
+
+    @ReactMethod
     public void stopListener() {
         telephonyManager.listen(callDetectionPhoneStateListener,
                 PhoneStateListener.LISTEN_NONE);
@@ -121,6 +132,8 @@ public class CallDetectionManagerModule
                     jsModule.callStateUpdated("Disconnected", phoneNumber);
                 } else if(wasAppInRinging == true) { // if the phone was ringing but there was no actual ongoing call, it must have gotten missed
                     jsModule.callStateUpdated("Missed", phoneNumber);
+                } else {
+                    jsModule.callStateUpdated("Idle", phoneNumber);
                 }
 
                 //reset device state

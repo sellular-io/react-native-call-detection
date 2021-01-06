@@ -63,6 +63,14 @@ class CallDetectorManager {
     }
   }
 
+  getCallState() {
+    if (Platform.OS === 'ios') {
+      
+    } else if (Platform.OS === 'android') {
+      NativeCallDetectorAndroid && NativeCallDetectorAndroid.getCallState()
+    }
+  }
+
   dispose() {
     NativeCallDetector && NativeCallDetector.stopListener()
     NativeCallDetectorAndroid && NativeCallDetectorAndroid.stopListener()
